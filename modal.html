@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="globals.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="global-modal-backdrop" id="globalModalBackdrop" hidden>
+        <div class="global-modal-wrapper">
+            <div class="global-modal-header" id="globalModalHeaderSection">
+                <h2 class="header-two global-modal-header-title" id="globalModalHeaderTitle"></h2>
+                <a class="crc__link--default global-modal-close-btn" id="globalModalHeaderCloseBtn">x</a>
+            </div>
+            <div class="global-modal-body">
+                <p class="blurb global-modal-body-content" id="globalModalBodyContent">Set something here
+                </p>
+            </div>
+            <div class="global-modal-footer">
+                <button class="crc__global-button crc__global-button--primary global-modal-footer-btn"
+                    id="globalModalOkBtn">Ok</button>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="test()">CLickme</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+        var globalModalBackdrop = $("#globalModalBackdrop");
+        var globalModalHeaderSection = $("#globalModalHeaderSection");
+        var globalModalHeaderTitle = $("#globalModalHeaderTitle");
+        var globalModalHeaderCloseBtn = $("#globalModalHeaderCloseBtn");
+        var globalModalBodyContent = $("#globalModalBodyContent");
+        var globalModalOkBtn = $("#globalModalOkBtn");
+
+        function test() {
+            var test = "werty";
+            var test2 = { "werty": "jhk" };
+            var globalModalProps = {
+                bodyContent: "globalModalBodyContentTEXT",
+                closeBtnEvent: "globalModalHeaderCloseBtnEvent()",
+                headerSection: true,
+                headerTitleText: "",
+                modalBackdropEvent: globalModalBackdropEvent.bind(null, test2),
+                okBtnEvent: "globalModalOkBtnEvent()",
+                okBtnText: "Test"
+            }
+
+            showGlobalModal(globalModalProps);
+        }
+
+        function showGlobalModal(props) {
+            // Modal Backdrop Event
+            if (props?.modalBackdropEvent && props?.modalBackdropEvent !== true) {
+                globalModalBackdrop.on("click", function () {
+                    props.modalBackdropEvent();
+                })
+            } else if (props?.modalBackdropEvent && props?.modalBackdropEvent === true) {
+                globalModalBackdrop.on("click", modalCloseEvent);
+            } else {
+                globalModalBackdrop.on("click", () => { });
+            }
+
+            // Modal Close Button Event
+            if (props?.closeBtnEvent && props?.closeBtnEvent !== true) {
+                globalModalHeaderCloseBtn.off("click");
+                globalModalHeaderCloseBtn.on("click", function () {
+                    props.closeBtnEvent();
+                })
+            } else {
+                globalModalHeaderCloseBtn.attr("onclick", "modalCloseEvent()");
+            }
+
+            // Modal OK Button Event
+            if (props?.okBtnEvent && props?.okBtnEvent !== true) {
+                globalModalOkBtn.off("click");
+                globalModalOkBtn.on("click", function () {
+                    props.okBtnEvent();
+                })
+            } else {
+                globalModalOkBtn.attr("onclick", "modalCloseEvent()");
+            }
+
+            // Modal Header and Title
+            if (props?.headerSection === false) {
+                globalModalHeaderSection.hide();
+            }
+
+            if (props?.headerTitleText) {
+                globalModalHeaderTitle.text(props.headerTitleText);
+            }
+
+            // Modal Body Content
+            if (props?.bodyContent) {
+                globalModalBodyContent.text(props.bodyContent);
+            }
+
+            // Modal Body Content
+            if (props?.okBtnText) {
+                globalModalOkBtn.text(props.okBtnText);
+            }
+
+            globalModalBackdrop.show();
+        }
+
+        function modalCloseEvent() {
+            globalModalBackdrop.hide();
+        }
+
+        function globalModalBackdropEvent() {
+            alert("for testing")
+        }
+    </script>
+
+</body>
+
+</html>
